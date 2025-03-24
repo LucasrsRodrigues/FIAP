@@ -1,55 +1,25 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
-export default function Home() {
+export default function Login() {
     const router = useRouter();
 
-    const [nome, setNome] = useState("");
-    const [cpf, setCPF] = useState("");
     const [apelido, setApelido] = useState("");
     const [senha, setSenha] = useState("");
-
-    async function getData() {
-        // Forma 1
-
-        fetch("https://viacep.com.br/ws/01001000/json/")
-            .then(response => response.json())
-            .then(data => {
-                console.log("===> Metodo 1")
-                console.log(data)
-                console.log("===> Metodo 1")
-            })
-
-        // Forma 2
-        const response = await fetch("https://viacep.com.br/ws/01001000/json/");
-
-        const data = await response.json();
-
-        console.log("==> Metodo 2")
-        console.log(data)
-        console.log("==> Metodo 2")
-
-    }
 
     async function submit() {
         try {
             // https://mock-bank-mock-back.yexuz7.easypanel.host/
 
-            console.log("===> submit 1")
             const datToSend = {
-                nome,
-                cpf,
                 apelido,
                 senha,
             }
 
-            console.log("===> submit 2")
-            console.log(datToSend)
-            console.log("===> submit 2")
-
             const response = await
-                fetch("https://mock-bank-mock-back.yexuz7.easypanel.host/contas", {
+                fetch("https://mock-bank-mock-back.yexuz7.easypanel.host/auth/login", {
                     method: "POST",
                     headers: {
                         'Content-Type': "application/json"
@@ -65,11 +35,14 @@ export default function Home() {
 
             const data = await response.json();
 
-            console.log("===> data submit")
+            console.log("===> Dados do usuario")
             console.log(data)
-            console.log("===> data submit")
+            console.log("===> Dados do usuario");
 
-            router.push("/Login");
+            await AsyncStorage.setItem("@token", data.token);
+
+            router.push("/Dashboard");
+
         } catch (error) {
             alert(error?.message);
         }
@@ -78,35 +51,6 @@ export default function Home() {
     return (
         <View style={styles.container}>
             <View style={styles.form}>
-
-                {/* "nome": "João Silva",*/}
-                <View style={styles.inputWrapper}>
-                    <Text style={styles.label}>
-                        Nome
-                    </Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Ex: João Silva"
-                        value={nome}
-                        onChangeText={(text) => setNome(text)}
-                    />
-                </View>
-
-                {/* "cpf": "123.456.789-00", */}
-                <View style={styles.inputWrapper}>
-                    <Text
-                        style={styles.label}
-                    >
-                        CPF
-                    </Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Ex: João Silva"
-                        value={cpf}
-                        onChangeText={(text) => setCPF(text)}
-                    />
-                </View>
-
                 {/* "apelido": "joaozinho", */}
                 <View
                     style={styles.inputWrapper}
@@ -147,17 +91,16 @@ export default function Home() {
                     onPress={submit}
                 >
                     <Text style={styles.buttonText}>
-                        Cadastrar!
+                        Entrar
                     </Text>
                 </TouchableOpacity>
             </View>
 
-            <Link href="/Login" style={styles.redirectButton}>
+            <Link href="/" style={styles.redirectButton}>
                 <Text style={styles.redirectButtonText}>
-                    Já tenho cadastro
+                    Abrir uma conta
                 </Text>
             </Link>
-
         </View>
     )
 }
