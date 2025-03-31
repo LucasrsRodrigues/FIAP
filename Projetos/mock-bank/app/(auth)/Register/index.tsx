@@ -81,9 +81,6 @@ export default function Register() {
       senha
     };
 
-    // Mostrar os dados para demonstração
-    console.log('Dados de cadastro:', userData);
-
     const response = await
       fetch("https://mock-bank-mock-back.yexuz7.easypanel.host/contas", {
         method: "POST",

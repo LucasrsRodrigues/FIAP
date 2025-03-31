@@ -1,3 +1,4 @@
+import { useAuth } from '@/hooks/useAuth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import React, { useState, useEffect } from 'react';
@@ -31,54 +32,12 @@ interface IUsuarioProps {
 
 export default function Profile() {
     const router = useRouter();
-    const [carregando, setCarregando] = useState(true);
-    const [usuario, setUsuario] = useState({} as IUsuarioProps);
+    const [carregando, setCarregando] = useState(false);
     const [temaEscuro, setTemaEscuro] = useState(false);
     const [notificacoes, setNotificacoes] = useState(true);
     const [biometria, setBiometria] = useState(false);
-    const [token, setToken] = useState("");
 
-    useEffect(() => {
-        const carregarDadosUsuario = async () => {
-            if(token === "") {
-                return;
-            }
-            setCarregando(true);
-
-            try {
-                const resposta = await fetch('https://mock-bank-mock-back.yexuz7.easypanel.host/contas/perfil', {
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
-
-                const dados = await resposta.json();
-                setUsuario(dados);
-
-                console.log("===> carregarDadosUsuario")
-                console.log(dados);
-                console.log("===> carregarDadosUsuario")
-
-                // setTimeout(() => {
-                //   setUsuario({
-                //     nome: 'João Silva',
-                //     email: 'joao.silva@email.com',
-                //     cpf: '123.456.789-00',
-                //     apelido: 'joaozinho',
-                //     celular: '(11) 98765-4321',
-                //     dataEntrada: '2023-05-15',
-                //     plano: 'Premium',
-                //   });
-                // }, 800);
-            } catch (erro) {
-                Alert.alert('Erro', 'Não foi possível carregar seus dados');
-            } finally {
-                setCarregando(false);
-            }
-        };
-
-        carregarDadosUsuario();
-    }, [token]);
+    const {token, handleLogout, usuario } = useAuth();
 
     const alternarTema = () => {
         setTemaEscuro(!temaEscuro);
@@ -97,26 +56,6 @@ export default function Profile() {
         setBiometria(!biometria);
         // Em um cenário real, você verificaria se o dispositivo suporta biometria
         // e salvaria essa preferência
-    };
-
-    // Função para fazer logout
-    const fazerLogout = () => {
-        Alert.alert(
-            'Sair da Conta',
-            'Tem certeza que deseja sair?',
-            [
-                { text: 'Cancelar', style: 'cancel' },
-                {
-                    text: 'Sair',
-                    style: 'destructive',
-                    onPress: () => {
-                        // Em um cenário real, você faria o logout na sua API
-                        // e redirecionaria para a tela de login
-                        router.navigate("/Login");
-                    }
-                }
-            ]
-        );
     };
 
     // Função para excluir conta
@@ -154,21 +93,6 @@ export default function Profile() {
             ]
         );
     };
-
-    async function getToken() {
-        const token = await AsyncStorage.getItem("@token");
-
-        if (token === null || token === undefined) {
-            router.push("/Login");
-            return;
-        }
-
-        setToken(token);
-    }
-
-    useEffect(() => {
-        getToken();
-    }, []);
 
     return (
         <SafeAreaView style={[styles.container, temaEscuro && styles.containerDark]}>
@@ -363,7 +287,7 @@ export default function Profile() {
                     <View style={[styles.secao, temaEscuro && styles.cardDark]}>
                         <TouchableOpacity
                             style={styles.botaoLogout}
-                            onPress={fazerLogout}
+                            onPress={handleLogout}
                         >
                             <Text style={styles.botaoLogoutText}>Sair da Conta</Text>
                         </TouchableOpacity>

@@ -1,61 +1,22 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router, useRouter } from 'expo-router';
+import { useAuth } from '@/hooks/useAuth';
 import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
-  TouchableOpacity,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  Alert,
+  TouchableOpacity, KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 
 export default function LoginScreen() {
   const [apelido, setApelido] = useState('');
   const [senha, setSenha] = useState('');
-   const router = useRouter();
+  const { handleLogin } = useAuth();
 
-  const handleLogin = async () => {
-    try {
-      if (apelido.trim() === '' || senha.trim() === '') {
-        Alert.alert('Erro', 'Por favor, preencha todos os campos');
-        return;
-      }
-
-      // Aqui você implementaria a lógica de autenticação
-      const datToSend = {
-        apelido,
-        senha,
-      }
-
-      const response = await
-        fetch("https://mock-bank-mock-back.yexuz7.easypanel.host/auth/login", {
-          method: "POST",
-          headers: {
-            'Content-Type': "application/json"
-          },
-          body: JSON.stringify(datToSend)
-        });
-
-      if (!response.ok) {
-        const dataError = await response.json();
-
-        throw new Error(dataError?.message);
-      }
-
-      const data = await response.json();
-
-      await AsyncStorage.setItem("@token", data.token);
-
-      // Limpar os campos após o login
-      router.push("/Dashboard")
-    } catch (error) {
-      Alert.alert(error?.message);
-    }
-  };
+  function submit() {
+    handleLogin(apelido, senha);
+  }
 
   return (
     <KeyboardAvoidingView
@@ -94,7 +55,7 @@ export default function LoginScreen() {
           <Text style={styles.forgotsenhaText}>Esqueceu a senha?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <TouchableOpacity style={styles.loginButton} onPress={submit}>
           <Text style={styles.loginButtonText}>ENTRAR</Text>
         </TouchableOpacity>
 

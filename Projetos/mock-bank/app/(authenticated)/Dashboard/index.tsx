@@ -1,3 +1,4 @@
+import { AuthProvider, useAuth } from '@/hooks/useAuth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import React, { useState, useEffect } from 'react';
@@ -35,7 +36,7 @@ export default function DashboardScreen() {
     const [carregandoTransacoes, setCarregandoTransacoes] = useState(true);
     const [atualizando, setAtualizando] = useState(false);
 
-    const [token, setToken] = useState("");
+    const { token, usuario  } = useAuth();
 
     const router = useRouter();
 
@@ -66,11 +67,6 @@ export default function DashboardScreen() {
 
             const dados = await resposta.json();
 
-
-            console.log("===> dados")
-            console.log(dados)
-            console.log("===> dados")
-
             setSaldo(dados.saldo);
         } catch (erro) {
             console.error('Erro ao buscar saldo:', erro);
@@ -97,9 +93,6 @@ export default function DashboardScreen() {
             });
             const dados = await resposta.json();
 
-            console.log("===> buscarTransacoes")
-            console.log(dados)
-            console.log("===> buscarTransacoes")
             setTransacoes(dados);
 
         } catch (erro) {
@@ -117,20 +110,17 @@ export default function DashboardScreen() {
         setAtualizando(false);
     };
 
-    async function getToken() {
-        const token = await AsyncStorage.getItem("@token");
+    // async function getToken() {
+    //     const token = await AsyncStorage.getItem("@token");
 
-        if (token === null || token === undefined) {
-            router.push("/Login");
-            return;
-        }
+    //     if (token === null || token === undefined) {
+    //         router.push("/Login");
+    //         return;
+    //     }
 
-        setToken(token);
-    }
+    //     setToken(token);
+    // }
 
-    useEffect(() => {
-        getToken();
-    }, []);
 
     // Carregar dados ao montar o componente
     useEffect(() => {
@@ -186,12 +176,12 @@ export default function DashboardScreen() {
             {/* Cabeçalho */}
             <View style={styles.header}>
                 <View>
-                    <Text style={styles.saudacao}>Olá, Usuário</Text>
+                    <Text style={styles.saudacao}>Olá, {usuario?.nome}</Text>
                     <Text style={styles.subtitulo}>Bem-vindo de volta</Text>
                 </View>
                 <TouchableOpacity style={styles.perfilContainer} onPress={() => router.push("/Profile")}>
                     <View style={styles.perfilImagem}>
-                        <Text style={styles.perfilInicial}>U</Text>
+                        <Text style={styles.perfilInicial}>{usuario?.nome?.charAt(0)}</Text>
                     </View>
                 </TouchableOpacity>
             </View>

@@ -101,10 +101,6 @@ export default function Send() {
             }
 
             const resultado = await resposta.json();
-
-            console.log("====>")
-            console.log(resultado)
-            console.log("====>")
             
             Alert.alert(
                 'Transferência Realizada',
