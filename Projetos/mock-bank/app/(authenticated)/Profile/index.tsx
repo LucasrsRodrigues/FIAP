@@ -52,10 +52,10 @@ export default function Profile() {
     };
 
     // Função para alternar biometria
-    const alternarBiometria = () => {
+    const alternarBiometria = async () => {
+        const saved = await AsyncStorage.setItem("@allow-fingerprint", "false");
+        
         setBiometria(!biometria);
-        // Em um cenário real, você verificaria se o dispositivo suporta biometria
-        // e salvaria essa preferência
     };
 
     // Função para excluir conta
@@ -93,6 +93,14 @@ export default function Profile() {
             ]
         );
     };
+
+    useEffect(() => {
+       (async () => {
+        const saved = await AsyncStorage.getItem("@allow-fingerprint");
+        
+        setBiometria(saved === "true");
+       })();
+    }, []);
 
     return (
         <SafeAreaView style={[styles.container, temaEscuro && styles.containerDark]}>

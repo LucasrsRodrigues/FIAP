@@ -2,6 +2,7 @@ import { AuthProvider, useAuth } from '@/hooks/useAuth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import React, { useState, useEffect } from 'react';
+import * as LocalAuthentication from 'expo-local-authentication';
 import {
     StyleSheet,
     Text,
@@ -35,6 +36,7 @@ export default function DashboardScreen() {
     const [carregandoSaldo, setCarregandoSaldo] = useState(true);
     const [carregandoTransacoes, setCarregandoTransacoes] = useState(true);
     const [atualizando, setAtualizando] = useState(false);
+    const [isBiometricSupported, setIsBiometricSupported] = useState(false);
 
     const { token, usuario  } = useAuth();
 
@@ -168,6 +170,70 @@ export default function DashboardScreen() {
             </TouchableOpacity>
         );
     };
+
+    // Verificação se o dispositivo tem biometria
+    useEffect(() => {
+        (async () => {
+            const saved = await AsyncStorage.getItem("@allow-fingerprint");
+            
+            if(saved === "true" || saved === "false") {
+                return;
+            }
+
+            const compatible = await LocalAuthentication.hasHardwareAsync();
+            setIsBiometricSupported(compatible);
+
+            if(compatible) {
+                const enrolled = await LocalAuthentication.isEnrolledAsync();
+
+                if(!enrolled) {
+                    Alert.alert("Nenhuma biometria cadastrada");
+                }
+                
+                handleBiometricAuth();
+
+            }
+        })();
+    }, []);
+
+    // Pedir autorização para utilizar a biometria
+    async function handleBiometricAuth () {
+        try {
+            const isAvailable = await LocalAuthentication.hasHardwareAsync();
+
+            if(!isAvailable) {
+                return Alert.alert(
+                    "Não suportado"
+                )
+            }
+
+            // Verificar se a biometria esta cadastrada
+            const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+
+            if(!isEnrolled) {
+                return Alert.alert(
+                    "Nenhuma biometria"
+                )
+            }
+
+            // Faz a autenticação
+            const result = await LocalAuthentication.authenticateAsync({
+                promptMessage: "Autentique-se para continuar",
+                fallbackLabel: "Usar senha",
+                disableDeviceFallback: false
+            });
+            
+            if(result.success) {
+                // Função
+                await AsyncStorage.setItem("@allow-fingerprint", "true");
+            }else {
+                // Falha
+                return;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <SafeAreaView style={styles.container}>

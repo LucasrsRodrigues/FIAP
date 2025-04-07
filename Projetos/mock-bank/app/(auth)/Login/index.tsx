@@ -1,22 +1,105 @@
 import { useAuth } from '@/hooks/useAuth';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
   TouchableOpacity, KeyboardAvoidingView,
-  Platform
+  Platform,
+  Alert
 } from 'react-native';
+import * as LocalAuthentication from 'expo-local-authentication';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen() {
   const [apelido, setApelido] = useState('');
   const [senha, setSenha] = useState('');
+  const [isSaved, setIsSaved] = useState(false);
+
   const { handleLogin } = useAuth();
 
-  function submit() {
+  async function submit() {
+  //  if(!isSaved) {
+    await AsyncStorage.setItem("@mock-bank-password", senha);
+    await AsyncStorage.setItem("@mock-bank-apelido", apelido);
+  //  }
+
     handleLogin(apelido, senha);
   }
+
+  async function handleBiometricAuth() {
+    try {
+      const isAvailable = await LocalAuthentication.hasHardwareAsync();
+
+      if (!isAvailable) {
+        return Alert.alert(
+          "Não suportado"
+        )
+      }
+
+      // Verificar se a biometria esta cadastrada
+      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+
+      if (!isEnrolled) {
+        return Alert.alert(
+          "Nenhuma biometria"
+        )
+      }
+
+      // Faz a autenticação
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: "Autentique-se para continuar",
+        fallbackLabel: "Usar senha",
+        disableDeviceFallback: false
+      });
+
+      if (result.success) {
+        // Função
+      } else {
+        // Falha
+      }
+
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // Verificação se o dispositivo tem biometria
+  useEffect(() => {
+    (async () => {
+     try {
+      const saved = await AsyncStorage.getItem("@allow-fingerprint");
+      setIsSaved(saved === "true");
+
+      if(saved === "true") {
+        const senha =  await AsyncStorage.getItem("@mock-bank-password");
+        const apelido = await AsyncStorage.getItem("@mock-bank-apelido");
+
+        if(senha === null || apelido === null) {
+          return;
+        }
+
+        const result = await LocalAuthentication.authenticateAsync({
+          promptMessage: "Autentique-se para continuar",
+          fallbackLabel: "Usar senha",
+          disableDeviceFallback: false
+        });
+  
+        if (result.success) {
+          handleLogin(apelido, senha);
+        } else {
+        Alert.alert("Falha na biometria.");
+        return;
+        }
+      }
+
+     } catch (error) {
+      console.log(error)
+     }
+    })();
+  }, []);
 
   return (
     <KeyboardAvoidingView
