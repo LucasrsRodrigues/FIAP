@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import * as LocalAuthentication from 'expo-local-authentication';
 import {
     StyleSheet,
@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../../hooks/useAuth';
-import Animated, { SlideInRight, SlideInUp } from "react-native-reanimated";
+import Animated, { SlideInDown, SlideInRight, SlideInUp, ZoomIn, ZoomInEasyDown, ZoomInEasyUp } from "react-native-reanimated";
 interface ITransacoesProps {
     categoria: string;
     contraparte: {
@@ -43,8 +43,6 @@ export default function DashboardScreen() {
     const { token, usuario, handleLogout } = useAuth();
 
     const { navigate } = useNavigation();
-
-
 
     // Função para formatar valores monetários
     const formatarMoeda = (valor: string) => {
@@ -118,7 +116,6 @@ export default function DashboardScreen() {
 
     // Carregar dados ao montar o componente
     useEffect(() => {
-
         buscarSaldo();
         buscarTransacoes();
     }, [token]);
@@ -129,7 +126,7 @@ export default function DashboardScreen() {
 
         return (
             <AnimatedTouchableOpacity
-                entering={SlideInRight.delay(1000).duration(300 * (Number(index) + 1))}
+                entering={SlideInRight.delay(2600).duration(300 * (Number(index) + 1))}
                 style={styles.transacaoItem}
                 onPress={() => Alert.alert('Detalhes', `Transação: ${item.descricao}\nValor: ${formatarMoeda(item.valor)}\nData: ${formatarData(item.data)}`)}
             >
@@ -234,11 +231,12 @@ export default function DashboardScreen() {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <Fragment>
             <StatusBar barStyle="dark-content" backgroundColor="#f8f9fa" />
 
             {/* Cabeçalho */}
             <Animated.View
+                entering={SlideInUp.duration(1000).delay(100)}
                 style={styles.header}
             >
                 <View>
@@ -253,7 +251,10 @@ export default function DashboardScreen() {
             </Animated.View>
 
             {/* Cartão de Saldo */}
-            <View style={styles.cardSaldo}>
+            <Animated.View
+                entering={ZoomInEasyDown.duration(500).delay(1100)}
+                style={styles.cardSaldo}
+            >
                 <View style={styles.cardTopo}>
                     <Text style={styles.cardTitulo}>Saldo disponível</Text>
                     <TouchableOpacity onPress={buscarSaldo}>
@@ -268,10 +269,13 @@ export default function DashboardScreen() {
                         <Text style={styles.valorSaldo}>{formatarMoeda(saldo)}</Text>
                     )}
                 </View>
-            </View>
+            </Animated.View>
 
             {/* Ações Rápidas */}
-            <View style={styles.acoes}>
+            <Animated.View
+                entering={ZoomInEasyUp.duration(500).delay(1100)}
+                style={styles.acoes}
+            >
                 <TouchableOpacity
                     style={styles.acaoBotao}
                     onPress={() => navigate('Send')}
@@ -301,10 +305,13 @@ export default function DashboardScreen() {
                     </View>
                     <Text style={styles.acaoTexto}>Histórico</Text>
                 </TouchableOpacity>
-            </View>
+            </Animated.View>
 
             {/* Lista de Transações */}
-            <View style={styles.transacoesContainer}>
+            <Animated.View
+                entering={SlideInDown.duration(1000).delay(500)}
+                style={styles.transacoesContainer}
+            >
                 <View style={styles.transacoesCabecalho}>
                     <Text style={styles.transacoesTitulo}>Transações Recentes</Text>
                     <TouchableOpacity onPress={() => navigate('Transactions')}>
@@ -333,8 +340,8 @@ export default function DashboardScreen() {
                         }
                     />
                 )}
-            </View>
-        </SafeAreaView>
+            </Animated.View>
+        </Fragment>
     );
 };
 
@@ -350,6 +357,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingTop: 20,
         paddingBottom: 10,
+        marginTop: 50
     },
     saudacao: {
         fontSize: 22,
