@@ -43,6 +43,10 @@ function AuthProvider({ children }: IAuthProviderProps) {
             return;
         }
 
+        if (usuario === null || usuario === undefined || !Object.hasOwn(usuario, "id")) {
+            await getProfileInfo(token)
+        }
+
         setToken(token);
     }
 
@@ -75,10 +79,6 @@ function AuthProvider({ children }: IAuthProviderProps) {
 
             const data = await response.json();
 
-            console.log("====> handleLogin")
-            console.log(data)
-            console.log("====> handleLogin")
-
             await AsyncStorage.setItem("@token", data.token);
             await getProfileInfo(data.token);
             setToken(data.token)
@@ -95,7 +95,6 @@ function AuthProvider({ children }: IAuthProviderProps) {
 
     async function getProfileInfo(userToken: string) {
         try {
-
             const response = await
                 fetch("https://mock-bank-mock-back.yexuz7.easypanel.host/contas/perfil", {
                     headers: {
@@ -103,8 +102,6 @@ function AuthProvider({ children }: IAuthProviderProps) {
                         'Authorization': `Bearer ${userToken}`
                     },
                 });
-
-
 
             const data = await response.json();
 
@@ -114,6 +111,7 @@ function AuthProvider({ children }: IAuthProviderProps) {
 
             setUsuario(data)
         } catch (error) {
+            console.error(error)
 
         }
     }

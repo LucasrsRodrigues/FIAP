@@ -11,11 +11,12 @@ import {
     RefreshControl,
     SafeAreaView,
     StatusBar,
-    Alert
+    Alert,
+    Easing
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../../hooks/useAuth';
-
+import Animated, { SlideInRight, SlideInUp } from "react-native-reanimated";
 interface ITransacoesProps {
     categoria: string;
     contraparte: {
@@ -28,6 +29,8 @@ interface ITransacoesProps {
     tipo: string;
     valor: number;
 }
+
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 export default function DashboardScreen() {
     const [saldo, setSaldo] = useState(0);
@@ -121,11 +124,12 @@ export default function DashboardScreen() {
     }, [token]);
 
     // Renderiza cada item da lista de transações
-    const renderTransacao = ({ item }: { item: ITransacoesProps }) => {
+    const renderTransacao = (item: ITransacoesProps, index: string) => {
         const isEntrada = item.tipo === 'recebida';
 
         return (
-            <TouchableOpacity
+            <AnimatedTouchableOpacity
+                entering={SlideInRight.delay(1000).duration(300 * (Number(index) + 1))}
                 style={styles.transacaoItem}
                 onPress={() => Alert.alert('Detalhes', `Transação: ${item.descricao}\nValor: ${formatarMoeda(item.valor)}\nData: ${formatarData(item.data)}`)}
             >
@@ -157,7 +161,7 @@ export default function DashboardScreen() {
                         {isEntrada ? '+' : '-'}{formatarMoeda(item.valor)}
                     </Text>
                 </View>
-            </TouchableOpacity>
+            </AnimatedTouchableOpacity>
         );
     };
 
@@ -177,7 +181,7 @@ export default function DashboardScreen() {
                 const enrolled = await LocalAuthentication.isEnrolledAsync();
 
                 if (!enrolled) {
-                    Alert.alert("Nenhuma biometria cadastrada");
+                    // Alert.alert("Nenhuma biometria cadastrada");
                 }
 
                 handleBiometricAuth();
@@ -192,18 +196,22 @@ export default function DashboardScreen() {
             const isAvailable = await LocalAuthentication.hasHardwareAsync();
 
             if (!isAvailable) {
-                return Alert.alert(
-                    "Não suportado"
-                )
+                // return Alert.alert(
+                //     "Não suportado"
+                // )
+                return;
             }
 
             // Verificar se a biometria esta cadastrada
             const isEnrolled = await LocalAuthentication.isEnrolledAsync();
 
             if (!isEnrolled) {
-                return Alert.alert(
-                    "Nenhuma biometria"
-                )
+                // return Alert.alert(
+                //     "Nenhuma biometria"
+                // )
+
+
+                return;
             }
 
             // Faz a autenticação
@@ -230,7 +238,9 @@ export default function DashboardScreen() {
             <StatusBar barStyle="dark-content" backgroundColor="#f8f9fa" />
 
             {/* Cabeçalho */}
-            <View style={styles.header}>
+            <Animated.View
+                style={styles.header}
+            >
                 <View>
                     <Text style={styles.saudacao}>Olá, {usuario?.nome}</Text>
                     <Text style={styles.subtitulo}>Bem-vindo de volta</Text>
@@ -240,7 +250,7 @@ export default function DashboardScreen() {
                         <Text style={styles.perfilInicial}>{usuario?.nome?.charAt(0)}</Text>
                     </View>
                 </TouchableOpacity>
-            </View>
+            </Animated.View>
 
             {/* Cartão de Saldo */}
             <View style={styles.cardSaldo}>
@@ -305,9 +315,9 @@ export default function DashboardScreen() {
                 {carregandoTransacoes ? (
                     <ActivityIndicator style={styles.carregando} size="large" color="#4a7df3" />
                 ) : (
-                    <FlatList
+                    <Animated.FlatList
                         data={transacoes}
-                        renderItem={renderTransacao}
+                        renderItem={({ index, item }) => renderTransacao(item, index)}
                         keyExtractor={item => String(item.id)}
                         refreshControl={
                             <RefreshControl
