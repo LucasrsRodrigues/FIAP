@@ -75,9 +75,12 @@ function AuthProvider({ children }: IAuthProviderProps) {
 
             const data = await response.json();
 
+            console.log("====> handleLogin")
+            console.log(data)
+            console.log("====> handleLogin")
+
             await AsyncStorage.setItem("@token", data.token);
-            await getProfileInfo();
-            // router.push("/(authenticated)/Dashboard");
+            await getProfileInfo(data.token);
             setToken(data.token)
         } catch (error) {
             Alert.alert(error?.message);
@@ -90,18 +93,24 @@ function AuthProvider({ children }: IAuthProviderProps) {
         setUsuario({} as IUsuarioProps);
     }
 
-    async function getProfileInfo() {
+    async function getProfileInfo(userToken: string) {
         try {
 
             const response = await
                 fetch("https://mock-bank-mock-back.yexuz7.easypanel.host/contas/perfil", {
                     headers: {
                         'Content-Type': "application/json",
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${userToken}`
                     },
                 });
 
+
+
             const data = await response.json();
+
+            console.log("====> getProfileInfo")
+            console.log(data)
+            console.log("====> getProfileInfo")
 
             setUsuario(data)
         } catch (error) {

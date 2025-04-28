@@ -12,6 +12,7 @@ import {
   Alert,
   SafeAreaView,
 } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
 export default function Register() {
   const [nome, setNome] = useState('');
@@ -21,6 +22,8 @@ export default function Register() {
   const [confirmaSenha, setConfirmaSenha] = useState('');
 
   const { navigate, goBack } = useNavigation();
+
+  const ANIMATION_FADE_IN = FadeIn.duration(1000).delay(100);
 
   // Função para formatar o CPF enquanto digita
   const formatarCPF = (texto: string) => {
@@ -120,12 +123,18 @@ export default function Register() {
         style={styles.keyboardView}
       >
         <ScrollView contentContainerStyle={styles.scrollView}>
-          <View style={styles.header}>
+          <Animated.View
+            entering={ANIMATION_FADE_IN}
+            style={styles.header}
+          >
             <Text style={styles.title}>Criar Conta</Text>
             <Text style={styles.subtitle}>Preencha os dados para se cadastrar</Text>
-          </View>
+          </Animated.View>
 
-          <View style={styles.form}>
+          <Animated.View
+            entering={ANIMATION_FADE_IN}
+            style={styles.form}
+          >
             <Text style={styles.label}>Nome completo</Text>
             <TextInput
               style={styles.input}
@@ -182,7 +191,7 @@ export default function Register() {
                 <Text style={styles.loginLink}>Faça login</Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </Animated.View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -37,9 +37,11 @@ export default function DashboardScreen() {
     const [atualizando, setAtualizando] = useState(false);
     const [isBiometricSupported, setIsBiometricSupported] = useState(false);
 
-    const { token, usuario } = useAuth();
+    const { token, usuario, handleLogout } = useAuth();
 
     const { navigate } = useNavigation();
+
+
 
     // Função para formatar valores monetários
     const formatarMoeda = (valor: string) => {
@@ -113,6 +115,7 @@ export default function DashboardScreen() {
 
     // Carregar dados ao montar o componente
     useEffect(() => {
+
         buscarSaldo();
         buscarTransacoes();
     }, [token]);

@@ -2,10 +2,10 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
   StyleSheet,
-  Text,
-  View,
-  TouchableOpacity, StatusBar
+  Text, TouchableOpacity, StatusBar
 } from 'react-native';
+
+import Animated, { FadeIn, SlideInDown, SlideInUp, ZoomIn } from 'react-native-reanimated';
 
 export default function WelcomeScreen() {
   const { navigate } = useNavigation();
@@ -14,18 +14,22 @@ export default function WelcomeScreen() {
     <>
       <StatusBar barStyle="dark-content" backgroundColor="#f7f8fa" />
 
-      <View style={styles.content}>
-        <View style={styles.logoContainer}>
-          {/* <Image
-            source={require('./assets/logo.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          /> */}
+      <Animated.View
+        entering={FadeIn.duration(1000).delay(300)}
+        style={styles.content}
+      >
+        <Animated.View
+          entering={SlideInUp.duration(100).delay(1000)}
+          style={styles.logoContainer}
+        >
           <Text style={styles.appName}>Mock Bank</Text>
           <Text style={styles.slogan}>O Banco de todos</Text>
-        </View>
+        </Animated.View>
 
-        <View style={styles.buttonContainer}>
+        <Animated.View
+          entering={ZoomIn.duration(1000).delay(1000)}
+          style={styles.buttonContainer}
+        >
           <TouchableOpacity
             style={styles.loginButton}
             onPress={() => navigate("LoginScreen")}
@@ -41,12 +45,15 @@ export default function WelcomeScreen() {
           >
             <Text style={styles.signUpButtonText}>CADASTRO</Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
 
-        <View style={styles.footer}>
+        <Animated.View
+          entering={SlideInDown.duration(100).delay(1000)}
+          style={styles.footer}
+        >
           <Text style={styles.footerText}>Versão 1.0.0</Text>
-        </View>
-      </View>
+        </Animated.View>
+      </Animated.View>
     </>
   );
 };

@@ -12,10 +12,15 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../../hooks/useAuth';
 
+import Animated, { FadeIn, SlideInUp } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
+
+
 export default function LoginScreen() {
   const [apelido, setApelido] = useState('');
   const [senha, setSenha] = useState('');
   const [isSaved, setIsSaved] = useState(false);
+  const { navigate } = useNavigation();
 
   const { handleLogin } = useAuth();
 
@@ -106,17 +111,19 @@ export default function LoginScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <View style={styles.logoContainer}>
-        {/* <Image
-          source={require('./assets/logo.png')} // Substitua pelo caminho correto da sua logo
-          style={styles.logo}
-          resizeMode="contain"
-        /> */}
+      <Animated.View
+        entering={SlideInUp.duration(1000).delay(100)}
+        style={styles.logoContainer}
+      >
         <Text style={styles.title}>Mock Bank</Text>
-      </View>
+      </Animated.View>
 
-      <View style={styles.formContainer}>
+      <Animated.View
+        entering={SlideInUp.duration(1000).delay(100)}
+        style={styles.formContainer}
+      >
         <Text style={styles.label}>Apelido</Text>
+
         <TextInput
           style={styles.input}
           placeholder="Digite seu apelido"
@@ -144,11 +151,11 @@ export default function LoginScreen() {
 
         <View style={styles.signupContainer}>
           <Text style={styles.signupText}>Não tem uma conta? </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigate("Register")}>
             <Text style={styles.signupLink}>Cadastre-se</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </Animated.View>
     </KeyboardAvoidingView>
   );
 };
