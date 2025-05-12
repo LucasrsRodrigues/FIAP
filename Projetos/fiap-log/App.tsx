@@ -2,7 +2,6 @@ import "./global.css"
 import React from 'react';
 import { View } from "react-native";
 
-import Teste from "./src/Teste";
 import { useFonts } from "expo-font";
 import {
   Inter_400Regular,
@@ -18,6 +17,7 @@ import {
   RedHatDisplay_700Bold
 } from "@expo-google-fonts/red-hat-display"
 import { ActivityIndicator } from "react-native";
+import Dashboard from "./src/Dashboard";
 
 export default function App() {
   const [isFontLoaded, isFontError] = useFonts({
@@ -40,7 +40,7 @@ export default function App() {
   }
 
   return (
-    <Teste />
+    <Dashboard />
   );
 }
 

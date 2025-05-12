@@ -7,9 +7,9 @@ colorScheme.set("dark");
 
 import { Fontisto, MaterialCommunityIcons, FontAwesome, Feather } from '@expo/vector-icons';
 
-export default function Teste() {
+export default function Dashboard() {
   return (
-    <View className="flex-1 pt-10 bg-main p-5 gap-10">
+    <View className="flex-1 pt-20 bg-main p-5 gap-10">
       <StatusBar style="light" />
 
       {/* Header */}
