@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "fiap-log",
+    "slug": "fiap-log",
+    "version": "1.0.0",
+    "icon": "./assets/images/ios-light.png",
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#040404",
+          "image": "./assets/images/splash-icon-light.png",
+          "imageWidth": 200
+        }
+      ],
+      "expo-font"
+    ],
+    "android": {
+      "package": "com.anonymous.fiaplog",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#040404"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.anonymous.fiaplog"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

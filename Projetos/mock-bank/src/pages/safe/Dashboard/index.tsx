@@ -40,7 +40,7 @@ export default function DashboardScreen() {
     const [atualizando, setAtualizando] = useState(false);
     const [isBiometricSupported, setIsBiometricSupported] = useState(false);
 
-    const { token, usuario, handleLogout } = useAuth();
+    const { token, usuario } = useAuth();
 
     const { navigate } = useNavigation();
 
