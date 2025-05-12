@@ -124,7 +124,7 @@ export default function Dashboard() {
         </View>
 
         {/* Historico */}
-        <View className="mt-20">
+        <View className="mt-10">
           <Text className="text-white text-base font-semibold">Shipment History</Text>
 
           <View className="mt-4 bg-[#131417] rounded-[10px]">

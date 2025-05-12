@@ -330,6 +330,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = fiaplog/fiaplog.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -349,14 +350,13 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anonymous.fiaplog";
-				PRODUCT_NAME = "fiaplog";
+				PRODUCT_BUNDLE_IDENTIFIER = com.anonymous.fiaplog;
+				PRODUCT_NAME = fiaplog;
 				SWIFT_OBJC_BRIDGING_HEADER = "fiaplog/fiaplog-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
-				TARGETED_DEVICE_FAMILY = "1";
-				CODE_SIGN_ENTITLEMENTS = fiaplog/fiaplog.entitlements;
 			};
 			name = Debug;
 		};
@@ -366,6 +366,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = fiaplog/fiaplog.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = fiaplog/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -380,13 +381,12 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anonymous.fiaplog";
-				PRODUCT_NAME = "fiaplog";
+				PRODUCT_BUNDLE_IDENTIFIER = com.anonymous.fiaplog;
+				PRODUCT_NAME = fiaplog;
 				SWIFT_OBJC_BRIDGING_HEADER = "fiaplog/fiaplog-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
-				TARGETED_DEVICE_FAMILY = "1";
-				CODE_SIGN_ENTITLEMENTS = fiaplog/fiaplog.entitlements;
 			};
 			name = Release;
 		};

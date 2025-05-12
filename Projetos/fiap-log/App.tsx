@@ -18,6 +18,7 @@ import {
 } from "@expo-google-fonts/red-hat-display"
 import { ActivityIndicator } from "react-native";
 import Dashboard from "./src/Dashboard";
+import Routes from "./src/routes";
 
 export default function App() {
   const [isFontLoaded, isFontError] = useFonts({
@@ -40,7 +41,7 @@ export default function App() {
   }
 
   return (
-    <Dashboard />
+    <Routes />
   );
 }
 
