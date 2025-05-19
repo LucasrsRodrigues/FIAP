@@ -12,9 +12,15 @@ import {
     Alert,
     ActivityIndicator,
     Image,
+    Modal,
+    Pressable,
 } from 'react-native';
 import { useAuth } from '../../../hooks/useAuth';
-
+import { languageFlags } from '../../../assets/languageFlags';
+import { getLocales } from 'expo-localization';
+import i18next from 'i18next';
+import * as Localization from "expo-localization";
+import { useTranslation } from 'react-i18next';
 interface IUsuarioProps {
     apelido: string;
     cpf: string;
@@ -35,9 +41,12 @@ export default function Profile() {
     const [carregando, setCarregando] = useState(false);
     const [temaEscuro, setTemaEscuro] = useState(false);
     const [notificacoes, setNotificacoes] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
     const [biometria, setBiometria] = useState(false);
-
+    const { t } = useTranslation();
     const { token, handleLogout, usuario, } = useAuth();
+    const locales = getLocales();
+    const [localization, setLocalization] = useState(languageFlags[locales[0].languageTag]);
 
     const alternarTema = () => {
         setTemaEscuro(!temaEscuro);
@@ -88,6 +97,12 @@ export default function Profile() {
             ]
         );
     };
+
+    const changeLanguage = async (lang: string) => {
+        await i18next.changeLanguage(lang)
+        setLocalization(languageFlags[lang])
+        setModalVisible(false);
+    }
 
     useEffect(() => {
         (async () => {
@@ -196,7 +211,7 @@ export default function Profile() {
                     {/* Configurações */}
                     <View style={[styles.secao, temaEscuro && styles.cardDark]}>
                         <Text style={[styles.secaoTitulo, temaEscuro && styles.textDark]}>
-                            Configurações
+                            {t("Settings")}
                         </Text>
 
                         <View style={styles.opcaoContainer}>
@@ -237,6 +252,19 @@ export default function Profile() {
                                 value={biometria}
                             />
                         </View>
+
+                        <TouchableOpacity
+                            onPress={() => setModalVisible(true)}
+                            style={[styles.opcaoContainer, styles.ultimaOpcao]}
+                        >
+                            <Text style={[styles.opcaoLabel, temaEscuro && styles.textDark]}>
+                                Idioma
+                            </Text>
+
+                            <Text style={{ fontSize: 25 }}>
+                                {`${localization}`}
+                            </Text>
+                        </TouchableOpacity>
                     </View>
 
                     {/* Links úteis */}
@@ -309,6 +337,37 @@ export default function Profile() {
                     </Text>
                 </ScrollView>
             )}
+
+            <Modal
+                animationType="slide"
+                // transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <ScrollView
+                    style={styles.centeredView}
+                    contentContainerStyle={{
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 60
+                    }}
+                >
+                    <View style={styles.modalView}>
+                        {Object.entries(languageFlags).map(([lang, flag]) => (
+                            <TouchableOpacity
+                                key={lang}
+                                style={styles.flagButton}
+                                onPress={() => changeLanguage(lang)}
+                            >
+                                <Text style={styles.flagButtonText}>{`${flag} ${lang}`}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                </ScrollView>
+            </Modal>
         </SafeAreaView>
     );
 };
@@ -536,5 +595,60 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#7b8bb2',
         marginBottom: 30,
+    },
+    centeredView: {
+        flex: 1,
+        // backgroundColor: '#f0c'
+    },
+    modalView: {
+        backgroundColor: "white",
+        width: '100%',
+        // flex: 1,
+        // margin: 20,
+        // backgroundColor: 'white',
+        // borderRadius: 20,
+        // padding: 35,
+        // alignItems: 'center',
+
+        // shadowColor: '#000',
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 2,
+        // },
+        // shadowOpacity: 0.25,
+        // shadowRadius: 4,
+        // elevation: 5,
+    },
+    modalWrapper: {
+        flex: 1,
+        backgroundColor: "#fff"
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+    flagButton: {
+        padding: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: "#f0c"
+    },
+    flagButtonText: {
+        fontSize: 16,
     },
 });

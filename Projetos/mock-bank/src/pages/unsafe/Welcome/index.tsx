@@ -1,5 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import { getLocales } from 'expo-localization';
+import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   StyleSheet,
   Text, TouchableOpacity, StatusBar
@@ -7,8 +9,11 @@ import {
 
 import Animated, { FadeIn, SlideInDown, SlideInUp, ZoomIn } from 'react-native-reanimated';
 
+
+
 export default function WelcomeScreen() {
   const { navigate } = useNavigation();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -23,7 +28,7 @@ export default function WelcomeScreen() {
           style={styles.logoContainer}
         >
           <Text style={styles.appName}>Mock Bank</Text>
-          <Text style={styles.slogan}>O Banco de todos</Text>
+          <Text style={styles.slogan}>{t("Everyone's Bank")}</Text>
         </Animated.View>
 
         <Animated.View
@@ -35,7 +40,7 @@ export default function WelcomeScreen() {
             onPress={() => navigate("LoginScreen")}
             activeOpacity={0.8}
           >
-            <Text style={styles.loginButtonText}>LOGIN</Text>
+            <Text style={styles.loginButtonText}>{t("Sign in")}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -43,7 +48,7 @@ export default function WelcomeScreen() {
             onPress={() => navigate("Register")}
             activeOpacity={0.8}
           >
-            <Text style={styles.signUpButtonText}>CADASTRO</Text>
+            <Text style={styles.signUpButtonText}>{t("Sign up")}</Text>
           </TouchableOpacity>
         </Animated.View>
 
@@ -109,6 +114,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 16,
     fontWeight: 'bold',
+    textTransform: "uppercase"
   },
   signUpButton: {
     backgroundColor: '#ffffff',
@@ -127,6 +133,7 @@ const styles = StyleSheet.create({
     color: '#2e3e5c',
     fontSize: 16,
     fontWeight: 'bold',
+    textTransform: "uppercase"
   },
   footer: {
     alignItems: 'center',

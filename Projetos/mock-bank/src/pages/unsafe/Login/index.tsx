@@ -14,6 +14,7 @@ import { useAuth } from '../../../hooks/useAuth';
 
 import Animated, { FadeIn, SlideInUp } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
+import { getLocales } from 'expo-localization';
 
 
 export default function LoginScreen() {
@@ -74,6 +75,8 @@ export default function LoginScreen() {
   // Verificação se o dispositivo tem biometria
   useEffect(() => {
     (async () => {
+
+
       try {
         const saved = await AsyncStorage.getItem("@allow-fingerprint");
         setIsSaved(saved === "true");

@@ -4050,15 +4050,15 @@ react-native-edge-to-edge@1.6.0:
   resolved "https://registry.yarnpkg.com/react-native-edge-to-edge/-/react-native-edge-to-edge-1.6.0.tgz#2ba63b941704a7f713e298185c26cde4d9e4b973"
   integrity sha512-2WCNdE3Qd6Fwg9+4BpbATUxCLcouF6YRY7K+J36KJ4l3y+tWN6XCqAC4DuoGblAAbb2sLkhEDp4FOlbOIot2Og==
 
-react-native-is-edge-to-edge@^1.1.6:
+react-native-is-edge-to-edge@1.1.7, react-native-is-edge-to-edge@^1.1.6:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.1.7.tgz#28947688f9fafd584e73a4f935ea9603bd9b1939"
   integrity sha512-EH6i7E8epJGIcu7KpfXYXiV2JFIYITtq+rVS8uEb+92naMRBdxhTuS8Wn2Q7j9sqyO0B+Xbaaf9VdipIAmGW4w==
 
-react-native-reanimated@3.16.2:
-  version "3.16.2"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.16.2.tgz#8ae2d632cbf02174ce3ef1329b3ce6e3cfe46aa2"
-  integrity sha512-Jk8y+iOLcK3J8YK3Qj/U+zclwfetgM1fFhlYaxFrJ5TPvuwdRG5YY1pvO91FcZ3C1+0meGHR6BZGl9d/Z0xh3Q==
+react-native-reanimated@~3.17.4:
+  version "3.17.5"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.17.5.tgz#09ebe3c9e3379c5c0c588b7ab30c131ea29b60f0"
+  integrity sha512-SxBK7wQfJ4UoWoJqQnmIC7ZjuNgVb9rcY5Xc67upXAFKftWg0rnkknTw6vgwnjRcvYThrjzUVti66XoZdDJGtw==
   dependencies:
     "@babel/plugin-transform-arrow-functions" "^7.0.0-0"
     "@babel/plugin-transform-class-properties" "^7.0.0-0"
@@ -4071,6 +4071,7 @@ react-native-reanimated@3.16.2:
     "@babel/preset-typescript" "^7.16.7"
     convert-source-map "^2.0.0"
     invariant "^2.2.4"
+    react-native-is-edge-to-edge "1.1.7"
 
 react-native-safe-area-context@5.4.0:
   version "5.4.0"
@@ -4084,6 +4085,11 @@ react-native-screens@~4.10.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-vision-camera@^4.6.4:
+  version "4.6.4"
+  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-4.6.4.tgz#f1c51dda2c5d558ea0ec235e2401abf5efa46875"
+  integrity sha512-d998uTHsGJ9bTlsClgT37RK1sK7ZQekv5y6ylynds3vmdK6YbFQJUoi2cvMrFN4dp9qvSlCjEfwekjMIz3guQA==
 
 react-native@0.79.2:
   version "0.79.2"

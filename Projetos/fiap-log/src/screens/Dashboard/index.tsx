@@ -6,8 +6,33 @@ import { colorScheme, useColorScheme } from "nativewind";
 colorScheme.set("dark");
 
 import { Fontisto, MaterialCommunityIcons, FontAwesome, Feather } from '@expo/vector-icons';
+import { useCameraPermission } from "react-native-vision-camera";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Dashboard() {
+  const { hasPermission, requestPermission } = useCameraPermission();
+  const { navigate } = useNavigation();
+
+  async function openCamera() {
+    try {
+      if (!hasPermission) {
+        const permission = await requestPermission();
+
+        if (!permission) {
+          throw new Error("Permissão não dada");
+        }
+      }
+
+
+      navigate("CameraScreen");
+
+    } catch (error) {
+      console.log("===> openCamera")
+      console.log(error)
+      console.log("===> openCamera")
+    }
+  }
+
   return (
     <View className="flex-1 pt-20 bg-main p-5 gap-10">
       <StatusBar style="light" />
@@ -56,7 +81,7 @@ export default function Dashboard() {
           />
         </View>
 
-        <TouchableOpacity className="border border-[#ffffff10] rounded-[10px] p-3">
+        <TouchableOpacity className="border border-[#ffffff10] rounded-[10px] p-3" onPress={openCamera}>
           <MaterialCommunityIcons name="line-scan" size={24} color="#fff" />
         </TouchableOpacity>
       </View>

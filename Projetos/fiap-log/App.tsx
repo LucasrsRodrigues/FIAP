@@ -1,4 +1,4 @@
-import "./global.css"
+import "./global.css";
 import React from 'react';
 import { View } from "react-native";
 
@@ -15,9 +15,8 @@ import {
   RedHatDisplay_500Medium,
   RedHatDisplay_600SemiBold,
   RedHatDisplay_700Bold
-} from "@expo-google-fonts/red-hat-display"
+} from "@expo-google-fonts/red-hat-display";
 import { ActivityIndicator } from "react-native";
-import Dashboard from "./src/Dashboard";
 import Routes from "./src/routes";
 
 export default function App() {
